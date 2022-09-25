@@ -1,7 +1,7 @@
 import hashlib
 import os
 import time
-DIRECTORIO_BASE = "C:/Users/equipo/Desktop"
+DIRECTORIO_BASE = "C:/Users/juanp/Desktop/IDOM"
 
 def generador_de_hash(DIRECTORIO_BASE):
     result = {}
@@ -26,7 +26,9 @@ def integrity(DIRECTORIO_BASE):
     hash_nuevo=generador_de_hash(DIRECTORIO_BASE)
     for i , z in hashes_de_archivos.items():
         if(z!=hash_nuevo.get(i)):
-            result = result + "Ataque a la integridad en el archivo "+ i   
+            print("Hash antes de modificar el archivo "+i, z)
+            result = result + "Ataque a la integridad en el archivo "+ i
+            print("Nuevo hash tras la modificación del archivo: "+i, hash_nuevo.get(i))   
     return result
 
 print(integrity(DIRECTORIO_BASE))
