@@ -1,6 +1,29 @@
+
+import smtplib
 import hashlib
 import os
 import time
+
+#Establecer variables del sistema
+user = "juahurmas@alum.us.es"
+passW = "HHpitt66...." 
+server = "mail.us.es"
+puerto = 587
+
+#Función de envío de mail
+def envioMail (recipient, subject, text):
+    smtpserver = smtplib.SMTP(server, puerto)
+    smtpserver.ehlo()
+    smtpserver.starttls()
+    smtpserver.login(user, passW)
+    header = 'To: '+recipient+ "\n" + "From: "+user
+    header = header + "\n" + "Subject:" +subject+ "\n"
+    msg = header + "\n" + text + "\n\n"
+    smtpserver.sendmail(user, recipient, msg)
+    smtpserver.close()
+
+envioMail("juanpepitt@gmail.com", "sub", "Este es un correo desde python para la practica de SSII PAI1")
+
 DIRECTORIO_BASE = "C:/Users/juanp/Desktop/IDOM"
 
 def generador_de_hash(DIRECTORIO_BASE):
