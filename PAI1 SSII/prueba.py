@@ -1,9 +1,10 @@
-
-import smtplib
+import envia_email
 import hashlib
 import os
 import time
+import logging
 
+<<<<<<< HEAD
 #Establecer variables del sistema
 #TO DO: RECUPERAR LA RUTA DE UN ARCHIVO EXTERNO AL SCRIPT, QUE SERÁ NUESTRO ARCHIVO DE CONFIGURACIÓN
 DIRECTORIO_BASE = "C:/Users/nicos/Desktop/IDOM" 
@@ -107,16 +108,51 @@ tree = createBST(list(range(n)), files, 0, n-1)
 print("¡Hecho en {} segundos!".format(time.perf_counter() - timer))
 
 """      
+=======
+#Configuración de la gestión del Log
+logging.basicConfig(filename='registro.log', format='%(asctime)s %(message)s', level=logging.DEBUG)
+
+#########################################################################################################################################################
+
+DIRECTORIO_BASE = "ruta"
+
+def generador_de_hash(DIRECTORIO_BASE):
+    result = {}
+    for i in os.scandir(DIRECTORIO_BASE):
+        if os.path.isdir(i):
+            carpeta = DIRECTORIO_BASE+"/"+i.name
+            result.update(generador_de_hash(carpeta))
+        else:
+            m = hashlib.sha256()
+            with open(i, "rb") as f:
+                for bloque in iter(lambda: f.read(4096), b""):
+                    m.update(bloque)
+                    result[i.name] = m.hexdigest()    
+    return result
+
+hashes_de_archivos = generador_de_hash(DIRECTORIO_BASE)
+
+time.sleep(15)
+
+#########################################################################################################################################################
+
+>>>>>>> 92d5732f36c29ae6b1eb078eec2d0ddb6f611e57
 def integrity(DIRECTORIO_BASE):
     result = ""
     hash_nuevo=generador_de_hash(DIRECTORIO_BASE)
     for i , z in hashes_de_archivos.items():
-        if(z!=hash_nuevo.get(i)):
-            print("Hash antes de modificar el archivo "+i, z)
+        if(z!=hash_nuevo[i]):
+
+            #print("Hash antes de modificar el archivo "+i, z)
             result = result + "Ataque a la integridad en el archivo "+ i
-            print("Nuevo hash tras la modificación del archivo: "+i, hash_nuevo.get(i))   
+            #print("Nuevo hash tras la modificación del archivo: "+i, hash_nuevo[i])   
+            logging.debug(result)      #si y solo si se produce una modificación se guarda en el log
     return result
 
+<<<<<<< HEAD
 print(integrity(DIRECTORIO_BASE))
 """
 
+=======
+integrity(DIRECTORIO_BASE)
+>>>>>>> 92d5732f36c29ae6b1eb078eec2d0ddb6f611e57
