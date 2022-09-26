@@ -12,21 +12,10 @@ server = "mail.us.es"
 puerto = 587
 destinatarios = ['juanpepitt@gmail.com']
 asunto = 'Reporte de registro mensual'
-
-#Función de envío de mail
-def envioMail (recipient, subject, text):
-    smtpserver = smtplib.SMTP(server, puerto)
-    smtpserver.ehlo()
-    smtpserver.starttls()
-    smtpserver.login(user, passW)
-    header = 'To: '+recipient+ "\n" + "From: "+user
-    header = header + "\n" + "Subject:" +subject+ "\n"
-    msg = header + "\n" + text + "\n\n"
-    smtpserver.sendmail(user, recipient, msg)
-    smtpserver.close()
  
 # Iniciamos los parámetros del script
-ruta_registro = 'C:/Users/juan.hurtado/Desktop/SSII/PAI1 SSII/registro.log'
+DIRECTORIO_BASE = "C:/Users/juanp/Desktop/IDOM"
+ruta_registro = DIRECTORIO_BASE + 'registro.log'
 cuerpo = 'Este es el contenido del mensaje'
 nombre_registro = 'registro.log'
 

@@ -9,7 +9,7 @@ logging.basicConfig(filename='registro.log', format='%(asctime)s %(message)s', l
 
 #########################################################################################################################################################
 
-DIRECTORIO_BASE = "ruta"
+DIRECTORIO_BASE = "C:/Users/juanp/Desktop/IDOM"
 
 def generador_de_hash(DIRECTORIO_BASE):
     result = {}
