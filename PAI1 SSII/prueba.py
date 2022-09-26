@@ -1,4 +1,4 @@
-import envia_email
+#import envia_email
 import hashlib
 import os
 import time
@@ -53,7 +53,8 @@ def getAllFilesInDirectory(mainPath, files = []):
 
 
 """
-Crea arbol binario de busqueda completamente balanceado a partir de una lista ordenada con todos los ids,
+Función que crea arbol binario de busqueda completamente balanceado a partir de una
+lista ordenada con todos los ids,
 una lista con todas las rutas a los archivos, y dos valores usados en la recursividad del algoritmo
 """
 def createBST(ids, files, a, b): 
@@ -69,13 +70,31 @@ def createBST(ids, files, a, b):
 """
 Función para hacer una búsqueda optimizada en el arbol generado
 """
-def searchFileById(ID, root):
+def searchFileById(root, ID):
     if ID == root.ID:
         return root
     elif ID < root.ID:
-        return searchFileById(ID, root.left)
+        return searchFileById(root.left, ID)
     elif ID > root.ID:
-        return searchFileById(ID, root.right)
+        return searchFileById(root.right, ID)
+
+"""
+Función que comprueba si ha sido comprometida la integridad de los archivos que se le pasan
+"""
+def checkIntegrity(tree, ids):
+    compromisedFiles = []
+    for i in ids:
+        node = searchFileById(tree, i)
+        newHash = getFileHash(node.path)
+        if newHash != node.hash:
+            compromisedFiles.append(node.path)
+    if compromisedFiles == []:
+        print("No files compromised")
+    else:
+        print("Compromised files:", compromisedFiles)
+    return compromisedFiles
+        
+
 
 files = getAllFilesInDirectory(DIRECTORIO_BASE)
 n = len(files)
@@ -84,6 +103,9 @@ timer = time.perf_counter()
 tree = createBST(list(range(n)), files, 0, n-1)
 print("¡Hecho en {} segundos!".format(time.perf_counter() - timer))
 
+time.sleep(10)
+
+checkIntegrity(tree, list(range(n)))
 """      
 def integrity(DIRECTORIO_BASE):
     result = ""
