@@ -1,4 +1,4 @@
-import envia_email
+#import envia_email
 import hashlib
 import os
 import time
@@ -9,7 +9,7 @@ logging.basicConfig(filename='registro.log', format='%(asctime)s %(message)s', l
 
 #########################################################################################################################################################
 
-DIRECTORIO_BASE = "C:/Users/juanp/Desktop/IDOM"
+DIRECTORIO_BASE = "ruta"
 
 def generador_de_hash(DIRECTORIO_BASE):
     result = {}
@@ -27,7 +27,7 @@ def generador_de_hash(DIRECTORIO_BASE):
 
 hashes_de_archivos = generador_de_hash(DIRECTORIO_BASE)
 
-time.sleep(5)
+time.sleep(15)
 
 #########################################################################################################################################################
 

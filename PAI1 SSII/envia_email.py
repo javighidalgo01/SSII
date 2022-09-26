@@ -5,12 +5,11 @@ from email.mime.base import MIMEBase
 from email import encoders
 
 
-#Establecer variables del sistema
+#Variables del sistema
 user = "juahurmas@alum.us.es"
 passW = "HHpitt66...." 
 server = "mail.us.es"
 puerto = 587
-
 destinatarios = ['juanpepitt@gmail.com']
 asunto = 'Reporte de registro mensual'
 
@@ -27,20 +26,18 @@ def envioMail (recipient, subject, text):
     smtpserver.close()
  
 # Iniciamos los parámetros del script
+ruta_registro = 'C:/Users/juan.hurtado/Desktop/SSII/PAI1 SSII/registro.log'
 cuerpo = 'Este es el contenido del mensaje'
+nombre_registro = 'registro.log'
 
+#Excepción si el fichero de log no se encuentra en la carpeta, en ese caso lo crea vacío
 try:
-    file = open('C:/Users/juanp/Documents/APUNTES/2022-2023/SSII/GitHubSSII/PAI1 SSII/registro.log')
-    print(file) # File handler
+    file = open(ruta_registro)
     file.close()
 except FileNotFoundError:
-    print('Sorry the file we\'re looking for doesn\'t exist. Creando el fichero...')
-    file = open('C:/Users/juanp/Documents/APUNTES/2022-2023/SSII/GitHubSSII/PAI1 SSII/registro.log', 'w')
+    print('Sorry the file we\'re looking for doesn\'t exist. Creating the log...')
+    file = open(ruta_registro, 'w')
     exit()
-
-
-ruta_adjunto = 'C:/Users/juanp/Documents/APUNTES/2022-2023/SSII/GitHubSSII/PAI1 SSII/registro.log'
-nombre_adjunto = 'registro.log'
 
 # Creamos el objeto mensaje
 mensaje = MIMEMultipart()
@@ -54,7 +51,7 @@ mensaje['Subject'] = asunto
 mensaje.attach(MIMEText(cuerpo, 'plain'))
  
 # Abrimos el archivo que vamos a adjuntar
-archivo_adjunto = open(ruta_adjunto, 'rb')
+archivo_adjunto = open(ruta_registro, 'rb')
  
 # Creamos un objeto MIME base
 adjunto_MIME = MIMEBase('application', 'octet-stream')
@@ -63,7 +60,7 @@ adjunto_MIME.set_payload((archivo_adjunto).read())
 # Codificamos el objeto en BASE64
 encoders.encode_base64(adjunto_MIME)
 # Agregamos una cabecera al objeto
-adjunto_MIME.add_header('Content-Disposition', "attachment; filename= %s" % nombre_adjunto)
+adjunto_MIME.add_header('Content-Disposition', "attachment; filename= %s" % nombre_registro)
 # Y finalmente lo agregamos al mensaje
 mensaje.attach(adjunto_MIME)
  
