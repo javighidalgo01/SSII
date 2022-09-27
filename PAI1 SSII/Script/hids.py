@@ -9,7 +9,7 @@ logging.basicConfig(filename='registro.log', format='%(asctime)s %(message)s', l
 
 #Establecer variables del sistema
 #TO DO: RECUPERAR LA RUTA DE UN ARCHIVO EXTERNO AL SCRIPT, QUE SERÁ NUESTRO ARCHIVO DE CONFIGURACIÓN
-DIRECTORIO_BASE = "C:/Users/nicos/Desktop/IDOM"
+DIRECTORIO_BASE = "C:/Users/equipo/Downloads/prueba"
 PERIODO = 10.0 #PERIODO EN SEGUNDOS
 REPORTE = 30 #CADA CUANTOS CHECKEOS SE MANDA UN REPORTE 
 
@@ -120,23 +120,8 @@ while True:
     time.sleep(PERIODO - ((time.time() - starttime) % PERIODO))
     if (k == REPORTE):
         print("REPORTE")
-        #envia_email
+        envia_email
         k = 0
     k+=1
 
-"""      
-def integrity(DIRECTORIO_BASE):
-    result = ""
-    hash_nuevo=generador_de_hash(DIRECTORIO_BASE)
-    for i , z in hashes_de_archivos.items():
-        if(z!=hash_nuevo[i]):
-
-            #print("Hash antes de modificar el archivo "+i, z)
-            result = result + "Ataque a la integridad en el archivo "+ i
-            #print("Nuevo hash tras la modificación del archivo: "+i, hash_nuevo[i])   
-            logging.debug(result)      #si y solo si se produce una modificación se guarda en el log
-    return result
-
-print(integrity(DIRECTORIO_BASE))
-"""
 

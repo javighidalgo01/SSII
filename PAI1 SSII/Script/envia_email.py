@@ -10,11 +10,11 @@ user = "juahurmas@alum.us.es"
 passW = "HHpitt66...." 
 server = "mail.us.es"
 puerto = 587
-destinatarios = ['juanpepitt@gmail.com']
+destinatarios = ['juanpepitt@gmail.com', 'javihidalgopowermix@gmail.com']
 asunto = 'Reporte de registro mensual'
  
 # Iniciamos los parámetros del script
-DIRECTORIO_BASE = "C:/Users/juan.hurtado/Desktop/SSII/PAI1 SSII"
+DIRECTORIO_BASE = "C:/Users/equipo/Desktop/SSII/SSII/SSII/PAI1 SSII"
 ruta_registro = DIRECTORIO_BASE + '/registro.log'
 cuerpo = 'Este es el contenido del mensaje'
 nombre_registro = 'registro.log'
