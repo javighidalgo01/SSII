@@ -9,7 +9,7 @@ from email import encoders
 #Variables del sistema
 user, passW, server, puerto, destinatarios, asunto, ruta_registro, cuerpo = params.loadMail()
 
-nombre_registro = 'registro.log'
+nombre_registro = ruta_registro
 
 def envia():
 
@@ -43,7 +43,7 @@ def envia():
     # Codificamos el objeto en BASE64
     encoders.encode_base64(adjunto_MIME)
     # Agregamos una cabecera al objeto
-    adjunto_MIME.add_header('Content-Disposition', "attachment; filename= %s" % nombre_registro)
+    adjunto_MIME.add_header('Content-Disposition', "attachment; filename= %s" % ruta_registro)
     # Y finalmente lo agregamos al mensaje
     mensaje.attach(adjunto_MIME)
     

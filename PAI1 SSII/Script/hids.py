@@ -97,22 +97,24 @@ def checkIntegrity(tree, ids):
         if newHash != node.hash:
             compromisedFiles.append(node.path)
             nameFile = os.path.basename(node.path)
-            logging.debug(nameFile)                     #si y solo si se produce una modificación se guarda en el log
+            logging.debug(nameFile)   #si y solo si se produce una modificación se guarda en el log
 
     if compromisedFiles != []:
         print("Compromised files:", compromisedFiles)
     return compromisedFiles
-        
+
+"""
+Código del HIDS
+"""
 if not os.path.exists(DIRECTORIO_BASE):
-    print("D")
     raise Exception("La ruta especificada no existe")
+
 files = getAllFilesInDirectory(DIRECTORIO_BASE)
 n = len(files)
 print("Construyendo árbol binario de búsqueda de {} archivos".format(n))
 timer = time.perf_counter()
 tree = createBST(list(range(n)), files, 0, n-1)
 print("¡Hecho en {} segundos!".format(time.perf_counter() - timer))
-print(searchFileById(tree, 57).path)
 starttime = time.time()
 k = 0
 while True:
@@ -122,7 +124,3 @@ while True:
         envia_email.envia()
         k = 0
     time.sleep(PERIODO - ((time.time() - starttime) % PERIODO))
-    
-
-
-
