@@ -14,8 +14,8 @@ destinatarios = ['juanpepitt@gmail.com']
 asunto = 'Reporte de registro mensual'
  
 # Iniciamos los parámetros del script
-DIRECTORIO_BASE = "C:/Users/juanp/Desktop/IDOM"
-ruta_registro = DIRECTORIO_BASE + 'registro.log'
+DIRECTORIO_BASE = "C:/Users/juanp/Documents/APUNTES/2022-2023/SSII/GitHubSSII/PAI1 SSII"
+ruta_registro = DIRECTORIO_BASE + '/registro.log'
 cuerpo = 'Este es el contenido del mensaje'
 nombre_registro = 'registro.log'
 

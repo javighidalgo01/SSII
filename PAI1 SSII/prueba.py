@@ -1,4 +1,4 @@
-#import envia_email
+import envia_email
 import hashlib
 import os
 import time
@@ -110,6 +110,9 @@ print("¡Hecho en {} segundos!".format(time.perf_counter() - timer))
 time.sleep(10)
 
 checkIntegrity(tree, list(range(n)))
+envia_email
+
+
 """      
 def integrity(DIRECTORIO_BASE):
     result = ""
