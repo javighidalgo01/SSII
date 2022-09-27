@@ -4,9 +4,12 @@ import os
 import time
 import logging
 
+#Configuración de la gestión del Log
+logging.basicConfig(filename='registro.log', format='%(asctime)s %(message)s', level=logging.DEBUG)
+
 #Establecer variables del sistema
 #TO DO: RECUPERAR LA RUTA DE UN ARCHIVO EXTERNO AL SCRIPT, QUE SERÁ NUESTRO ARCHIVO DE CONFIGURACIÓN
-DIRECTORIO_BASE = "C:/Users/nicos/Desktop/IDOM" 
+DIRECTORIO_BASE = "C:/Users/juanp/Desktop/IDOM" 
 
 """
 Implementación de la clase de arbol binario. Cada nodo representa un archivo
@@ -29,15 +32,15 @@ Función que obtiene el hash de un archivo. Utiliza un tamaño de buffer de 64KB
 para evitar colapso de memoria con archivos grandes
 """
 def getFileHash(path, buffer_size = 65536):
-    sha1 = hashlib.sha1()
+    sha256 = hashlib.sha256()
     with open(path, 'rb') as f:
         while True:
             data = f.read(buffer_size)
             if not data:
                 break
-            sha1.update(data)
+            sha256.update(data)
 
-    return sha1.hexdigest()
+    return sha256.hexdigest()
 
 """
 Función que obtiene una lista con todas las rutas de los archivos a proteger
@@ -83,18 +86,19 @@ Función que comprueba si ha sido comprometida la integridad de los archivos que
 """
 def checkIntegrity(tree, ids):
     compromisedFiles = []
+    nameFile = ""
     for i in ids:
         node = searchFileById(tree, i)
         newHash = getFileHash(node.path)
         if newHash != node.hash:
             compromisedFiles.append(node.path)
-    if compromisedFiles == []:
-        print("No files compromised")
-    else:
+            nameFile = os.path.basename(node.path)
+            logging.debug(nameFile)                     #si y solo si se produce una modificación se guarda en el log
+
+    if compromisedFiles != []:
         print("Compromised files:", compromisedFiles)
     return compromisedFiles
         
-
 
 files = getAllFilesInDirectory(DIRECTORIO_BASE)
 n = len(files)

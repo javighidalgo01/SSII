@@ -21,10 +21,10 @@ nombre_registro = 'registro.log'
 
 #Excepción si el fichero de log no se encuentra en la carpeta, en ese caso lo crea vacío
 try:
-    file = open(ruta_registro)
+    file = open(ruta_registro, 'r')
     file.close()
 except FileNotFoundError:
-    print('Sorry the file we\'re looking for doesn\'t exist. Creating the log...')
+    print('El fichero '+nombre_registro+' no se encuentra en el directorio. Creando el nuevo fichero vacío...')
     file = open(ruta_registro, 'w')
     exit()
 
