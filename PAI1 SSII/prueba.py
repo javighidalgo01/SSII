@@ -9,7 +9,7 @@ logging.basicConfig(filename='registro.log', format='%(asctime)s %(message)s', l
 
 #Establecer variables del sistema
 #TO DO: RECUPERAR LA RUTA DE UN ARCHIVO EXTERNO AL SCRIPT, QUE SERÁ NUESTRO ARCHIVO DE CONFIGURACIÓN
-DIRECTORIO_BASE = "C:/Users/juanp/Desktop/IDOM" 
+DIRECTORIO_BASE = "C:/Users/juan.hurtado/Desktop/CRTM" 
 
 """
 Implementación de la clase de arbol binario. Cada nodo representa un archivo
@@ -110,8 +110,7 @@ print("¡Hecho en {} segundos!".format(time.perf_counter() - timer))
 time.sleep(10)
 
 checkIntegrity(tree, list(range(n)))
-envia_email
-
+envia_email.envia()
 
 """      
 def integrity(DIRECTORIO_BASE):
