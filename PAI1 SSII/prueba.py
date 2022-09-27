@@ -9,7 +9,9 @@ logging.basicConfig(filename='registro.log', format='%(asctime)s %(message)s', l
 
 #Establecer variables del sistema
 #TO DO: RECUPERAR LA RUTA DE UN ARCHIVO EXTERNO AL SCRIPT, QUE SERÁ NUESTRO ARCHIVO DE CONFIGURACIÓN
-DIRECTORIO_BASE = "C:/Users/juan.hurtado/Desktop/CRTM" 
+DIRECTORIO_BASE = "C:/Users/nicos/Desktop/IDOM"
+PERIODO = 10.0 #PERIODO EN SEGUNDOS
+REPORTE = 30 #CADA CUANTOS CHECKEOS SE MANDA UN REPORTE 
 
 """
 Implementación de la clase de arbol binario. Cada nodo representa un archivo
@@ -99,7 +101,9 @@ def checkIntegrity(tree, ids):
         print("Compromised files:", compromisedFiles)
     return compromisedFiles
         
-
+if not os.path.exists(DIRECTORIO_BASE):
+    print("D")
+    raise Exception("La ruta especificada no existe")
 files = getAllFilesInDirectory(DIRECTORIO_BASE)
 n = len(files)
 print("Construyendo árbol binario de búsqueda de {} archivos".format(n))
@@ -107,10 +111,18 @@ timer = time.perf_counter()
 tree = createBST(list(range(n)), files, 0, n-1)
 print("¡Hecho en {} segundos!".format(time.perf_counter() - timer))
 
-time.sleep(10)
-
-checkIntegrity(tree, list(range(n)))
-envia_email.envia()
+starttime = time.time()
+k = 0
+while True:
+    print("tick")
+    checkIntegrity(tree, list(range(n)))
+    print(PERIODO - ((time.time() - starttime)  % PERIODO))
+    time.sleep(PERIODO - ((time.time() - starttime) % PERIODO))
+    if (k == REPORTE):
+        print("REPORTE")
+        #envia_email
+        k = 0
+    k+=1
 
 """      
 def integrity(DIRECTORIO_BASE):
