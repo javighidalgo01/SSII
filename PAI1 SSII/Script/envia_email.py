@@ -1,4 +1,5 @@
 import smtplib
+import params
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
@@ -6,17 +7,8 @@ from email import encoders
 
 
 #Variables del sistema
-user = "juahurmas@alum.us.es"
-passW = "HHpitt66...." 
-server = "mail.us.es"
-puerto = 587
-destinatarios = ['juanpepitt@gmail.com', 'javihidalgopowermix@gmail.com']
-asunto = 'Reporte de registro mensual'
- 
-# Iniciamos los parámetros del script
-DIRECTORIO_BASE = "C:/Users/equipo/Desktop/SSII/SSII/SSII/PAI1 SSII"
-ruta_registro = DIRECTORIO_BASE + '/registro.log'
-cuerpo = 'Este es el contenido del mensaje'
+user, passW, server, puerto, destinatarios, asunto, ruta_registro, cuerpo = params.loadMail()
+
 nombre_registro = 'registro.log'
 
 def envia():
@@ -68,7 +60,7 @@ def envia():
     texto = mensaje.as_string()
 
     # Enviamos el mensaje
-    sesion_smtp.sendmail(user, destinatarios, texto)
+    sesion_smtp.sendmail("nicsiblit@alum.us.es", destinatarios, texto)
 
     # Cerramos la conexión
     sesion_smtp.quit()
