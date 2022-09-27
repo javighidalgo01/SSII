@@ -41,8 +41,10 @@ def getFileHash(path, buffer_size = 65536):
                     break
                 sha1.update(data)
         return sha1.hexdigest() 
-    except:
+    except OSError as e:
         print("No se ha podido abrir el siguiente archivo:\n{}".format(path))
+        raise e
+        
 
 """
 Función que obtiene una lista con todas las rutas de los archivos a proteger
@@ -110,7 +112,7 @@ print("Construyendo árbol binario de búsqueda de {} archivos".format(n))
 timer = time.perf_counter()
 tree = createBST(list(range(n)), files, 0, n-1)
 print("¡Hecho en {} segundos!".format(time.perf_counter() - timer))
-
+print(searchFileById(tree, 57).path)
 starttime = time.time()
 k = 0
 while True:
