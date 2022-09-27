@@ -3,15 +3,13 @@ import hashlib
 import os
 import time
 import logging
-
-#Configuración de la gestión del Log
-logging.basicConfig(filename='registro.log', format='%(asctime)s %(message)s', level=logging.DEBUG)
+import params
 
 #Establecer variables del sistema
-#TO DO: RECUPERAR LA RUTA DE UN ARCHIVO EXTERNO AL SCRIPT, QUE SERÁ NUESTRO ARCHIVO DE CONFIGURACIÓN
-DIRECTORIO_BASE = "C:/Users/equipo/Downloads/prueba"
-PERIODO = 10.0 #PERIODO EN SEGUNDOS
-REPORTE = 30 #CADA CUANTOS CHECKEOS SE MANDA UN REPORTE 
+
+DIRECTORIO_BASE, PERIODO, REPORTE = params.loadHIDS()
+#Configuración de la gestión del Log
+logging.basicConfig(filename='registro.log', format='%(asctime)s %(message)s', level=logging.DEBUG)
 
 """
 Implementación de la clase de arbol binario. Cada nodo representa un archivo
@@ -34,15 +32,17 @@ Función que obtiene el hash de un archivo. Utiliza un tamaño de buffer de 64KB
 para evitar colapso de memoria con archivos grandes
 """
 def getFileHash(path, buffer_size = 65536):
-    sha256 = hashlib.sha256()
-    with open(path, 'rb') as f:
-        while True:
-            data = f.read(buffer_size)
-            if not data:
-                break
-            sha256.update(data)
-
-    return sha256.hexdigest()
+    sha1 = hashlib.sha1()
+    try:
+        with open(path, 'rb') as f:
+            while True:
+                data = f.read(buffer_size)
+                if not data:
+                    break
+                sha1.update(data)
+        return sha1.hexdigest() 
+    except:
+        print("No se ha podido abrir el siguiente archivo:\n{}".format(path))
 
 """
 Función que obtiene una lista con todas las rutas de los archivos a proteger
@@ -114,14 +114,13 @@ print("¡Hecho en {} segundos!".format(time.perf_counter() - timer))
 starttime = time.time()
 k = 0
 while True:
-    print("tick")
-    checkIntegrity(tree, list(range(n)))
-    print(PERIODO - ((time.time() - starttime)  % PERIODO))
-    time.sleep(PERIODO - ((time.time() - starttime) % PERIODO))
-    if (k == REPORTE):
-        print("REPORTE")
-        envia_email
-        k = 0
     k+=1
+    checkIntegrity(tree, list(range(n)))
+    if (k == REPORTE):
+        envia_email.envia()
+        k = 0
+    time.sleep(PERIODO - ((time.time() - starttime) % PERIODO))
+    
+
 
 
