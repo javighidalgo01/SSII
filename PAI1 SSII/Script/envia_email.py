@@ -41,7 +41,8 @@ def envia():
     # Codificamos el objeto en BASE64
     encoders.encode_base64(adjunto_MIME)
     # Agregamos una cabecera al objeto
-    adjunto_MIME.add_header('Content-Disposition', "attachment; filename= %s" % ruta_registro)
+    titulo_archivo = ruta_registro.replace('.', '', 1).replace('\\', '').replace('\\', '')
+    adjunto_MIME.add_header('Content-Disposition', "attachment; filename= %s" % titulo_archivo)
     # Y finalmente lo agregamos al mensaje
     mensaje.attach(adjunto_MIME)
     

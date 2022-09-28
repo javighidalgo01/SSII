@@ -9,7 +9,7 @@ import params
 
 DIRECTORIO_BASE, PERIODO, REPORTE = params.loadHIDS()
 #Configuración de la gestión del Log
-logging.basicConfig(filename='..\\registro.log', format='%(asctime)s %(message)s', level=logging.DEBUG)
+logging.basicConfig(filename='.\\registro.log', format='%(asctime)s %(message)s', level=logging.DEBUG)
 
 """
 Implementación de la clase de arbol binario. Cada nodo representa un archivo
