@@ -9,8 +9,6 @@ from email import encoders
 #Variables del sistema
 sender, user, passw, server, puerto, destinatarios, asunto, ruta_registro, cuerpo = params.loadMail()
 
-nombre_registro = ruta_registro
-
 def envia():
 
     #Excepción si el fichero de log no se encuentra en la carpeta, en ese caso lo crea vacío
@@ -18,11 +16,9 @@ def envia():
         file = open(ruta_registro, 'r')
         file.close()
     except FileNotFoundError:
-        print('El fichero '+nombre_registro+' no se encuentra en el directorio. Creando el nuevo fichero vacío...')
-        with open(ruta_registro, 'rb') as f:
+        print('El fichero '+ruta_registro+' no se encuentra en el directorio. Creando el nuevo fichero vacío...')
+        with open(ruta_registro, 'x') as f:
             f.write("#Registro de los archivos comprometidos al final de cada día")
-            
-        exit()
 
     # Creamos el objeto mensaje
     mensaje = MIMEMultipart()
