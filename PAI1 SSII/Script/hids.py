@@ -9,7 +9,7 @@ import params
 
 DIRECTORIO_BASE, PERIODO, REPORTE = params.loadHIDS()
 #Configuración de la gestión del Log
-logging.basicConfig(filename='registro.log', format='%(asctime)s %(message)s', level=logging.DEBUG)
+logging.basicConfig(filename='..\\registro.log', format='%(asctime)s %(message)s', level=logging.DEBUG)
 
 """
 Implementación de la clase de arbol binario. Cada nodo representa un archivo
@@ -95,13 +95,12 @@ def checkIntegrity(tree, ids):
         node = searchFileById(tree, i)
         newHash = getFileHash(node.path)
         if newHash != node.hash:
-            compromisedFiles.append(node.path)
+            compromisedFiles.append(node)
             nameFile = os.path.basename(node.path)
-            logging.debug(nameFile)                                             #si y solo si se produce una modificación se guarda en el log
+            logging.debug(nameFile)    #si y solo si se produce una modificación se guarda en el log
 
-    if compromisedFiles != []:
-        print("Compromised files:", compromisedFiles)
-    return compromisedFiles
+    for node in compromisedFiles:
+        node.hash = getFileHash(node.path)
 
 """
 Código del HIDS
@@ -121,6 +120,10 @@ while True:
     k+=1
     checkIntegrity(tree, list(range(n)))
     if (k == REPORTE):
-        envia_email.envia()
+        try:
+            pass
+            envia_email.envia()
+        except:
+            pass
         k = 0
     time.sleep(PERIODO - ((time.time() - starttime) % PERIODO))

@@ -18,7 +18,7 @@ def envia():
     except FileNotFoundError:
         print('El fichero '+ruta_registro+' no se encuentra en el directorio. Creando el nuevo fichero vacío...')
         with open(ruta_registro, 'x') as f:
-            f.write("#Registro de los archivos comprometidos al final de cada día")
+            f.write("#Registro de los archivos comprometidos al final de cada día\n")
 
     # Creamos el objeto mensaje
     mensaje = MIMEMultipart()
