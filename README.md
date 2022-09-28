@@ -21,8 +21,6 @@
 [![Contributors][contributors-shield]][contributors-url]
 [![Python][python-shield]][python-url]
 
-
-
 <!-- PROJECT LOGO -->
 <!--
 <br />
@@ -141,6 +139,8 @@ _Below is an example of how you can instruct your audience on installing and set
 ## Contact
 
 Juan Pedro Hurtado [https://github.com/Juanpepitt](https://github.com/Juanpepitt)
+Javier Hidalgo [https://github.com/javighidalgo01](https://github.com/javighidalgo01)
+Nicolás Sibello [https://github.com/ElGlicho](https://github.com/ElGlicho)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
