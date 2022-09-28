@@ -7,7 +7,7 @@ from email import encoders
 
 
 #Variables del sistema
-user, passW, server, puerto, destinatarios, asunto, ruta_registro, cuerpo = params.loadMail()
+sender, user, passw, server, puerto, destinatarios, asunto, ruta_registro, cuerpo = params.loadMail()
 
 nombre_registro = ruta_registro
 
@@ -19,14 +19,16 @@ def envia():
         file.close()
     except FileNotFoundError:
         print('El fichero '+nombre_registro+' no se encuentra en el directorio. Creando el nuevo fichero vacío...')
-        file = open(ruta_registro, 'w')
+        with open(ruta_registro, 'rb') as f:
+            f.write("#Registro de los archivos comprometidos al final de cada día")
+            
         exit()
 
     # Creamos el objeto mensaje
     mensaje = MIMEMultipart()
     
     # Establecemos los atributos del mensaje
-    mensaje['From'] = user
+    mensaje['From'] = sender
     mensaje['To'] = ", ".join(destinatarios)
     mensaje['Subject'] = asunto
     
@@ -54,13 +56,13 @@ def envia():
     sesion_smtp.starttls()
 
     # Iniciamos sesión en el servidor
-    sesion_smtp.login(user,passW)
+    sesion_smtp.login(user,passw)
 
     # Convertimos el objeto mensaje a texto
     texto = mensaje.as_string()
 
     # Enviamos el mensaje
-    sesion_smtp.sendmail("juahurmas@alum.us.es", destinatarios, texto)
+    sesion_smtp.sendmail(sender, destinatarios, texto)
 
     # Cerramos la conexión
     sesion_smtp.quit()

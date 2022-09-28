@@ -26,10 +26,10 @@ def loadMail():
     
     try:
         with open("PARAMETERS.conf", 'rt') as f:
-            params = [l.split('=')[1].split('#')[0].strip() for l in f.readlines()[3:11]]
-            destinatarios = [d.strip() for d in params[4].split(',')]
+            params = [l.split('=')[1].split('#')[0].strip() for l in f.readlines()[3:12]]
+            destinatarios = [d.strip() for d in params[5].split(',')]
         
-        return (params[0], params[1], params[2], int(params[3]), destinatarios, params[5], params[6],params[7])
+        return (params[0], params[1], params[2], params[3], int(params[4]), destinatarios, params[6],params[7], params[8])
                                 
     except OSError as e:
         print("No se ha podido abrir el fichero de configuración")
