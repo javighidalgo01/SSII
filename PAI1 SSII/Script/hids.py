@@ -32,15 +32,15 @@ Función que obtiene el hash de un archivo. Utiliza un tamaño de buffer de 64KB
 para evitar colapso de memoria con archivos grandes
 """
 def getFileHash(path, buffer_size = 65536):
-    sha1 = hashlib.sha1()
+    sha256 = hashlib.sha256()
     try:
         with open(path, 'rb') as f:
             while True:
                 data = f.read(buffer_size)
                 if not data:
                     break
-                sha1.update(data)
-        return sha1.hexdigest() 
+                sha256.update(data)
+        return sha256.hexdigest() 
     except OSError as e:
         print("No se ha podido abrir el siguiente archivo:\n{}".format(path))
         raise e
@@ -97,7 +97,7 @@ def checkIntegrity(tree, ids):
         if newHash != node.hash:
             compromisedFiles.append(node.path)
             nameFile = os.path.basename(node.path)
-            logging.debug(nameFile)   #si y solo si se produce una modificación se guarda en el log
+            logging.debug(nameFile)                                             #si y solo si se produce una modificación se guarda en el log
 
     if compromisedFiles != []:
         print("Compromised files:", compromisedFiles)

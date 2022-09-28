@@ -60,7 +60,7 @@ def envia():
     texto = mensaje.as_string()
 
     # Enviamos el mensaje
-    sesion_smtp.sendmail("nicsiblit@alum.us.es", destinatarios, texto)
+    sesion_smtp.sendmail("juahurmas@alum.us.es", destinatarios, texto)
 
     # Cerramos la conexión
     sesion_smtp.quit()
