@@ -4,12 +4,16 @@ import os
 import time
 import logging
 import params
-
+import pathlib
 #Establecer variables del sistema
 
 DIRECTORIO_BASE, PERIODO, REPORTE = params.loadHIDS()
 #Configuración de la gestión del Log
-logging.basicConfig(filename='.\\registro.log', format='%(asctime)s %(message)s', level=logging.DEBUG)
+script_path = pathlib.Path(__file__).parent.parent.resolve()
+register_filename = "registro.log"
+register_path = os.path.join(script_path, register_filename)
+
+logging.basicConfig(filename=register_path, format='%(asctime)s %(message)s', level=logging.DEBUG)
 
 """
 Implementación de la clase de arbol binario. Cada nodo representa un archivo
@@ -99,9 +103,6 @@ def checkIntegrity(tree, ids):
             nameFile = os.path.basename(node.path)
             logging.debug(nameFile)    #si y solo si se produce una modificación se guarda en el log
 
-    for node in compromisedFiles:
-        node.hash = getFileHash(node.path)
-
 """
 Código del HIDS
 """
@@ -110,10 +111,10 @@ if not os.path.exists(DIRECTORIO_BASE):
 
 files = getAllFilesInDirectory(DIRECTORIO_BASE)
 n = len(files)
-print("Construyendo árbol binario de búsqueda de {} archivos".format(n))
+print("Construyendo arbol binario de busqueda de {} archivos".format(n))
 timer = time.perf_counter()
 tree = createBST(list(range(n)), files, 0, n-1)
-print("¡Hecho en {} segundos!".format(time.perf_counter() - timer))
+print("Hecho en {} segundos!".format(time.perf_counter() - timer))
 starttime = time.time()
 k = 0
 while True:
@@ -121,7 +122,6 @@ while True:
     checkIntegrity(tree, list(range(n)))
     if (k == REPORTE):
         try:
-            pass
             envia_email.envia()
         except:
             pass

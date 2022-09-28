@@ -4,21 +4,25 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
-
+import pathlib
+import os
 
 #Variables del sistema
 sender, user, passw, server, puerto, destinatarios, asunto, ruta_registro, cuerpo = params.loadMail()
 
+script_path = pathlib.Path(__file__).parent.parent.resolve()
+register_filename = "registro.log"
+register_path = os.path.join(script_path, register_filename)
 def envia():
 
     #Excepción si el fichero de log no se encuentra en la carpeta, en ese caso lo crea vacío
     try:
-        file = open(ruta_registro, 'r')
+        file = open(register_path, 'r')
         file.close()
     except FileNotFoundError:
-        print('El fichero '+ruta_registro+' no se encuentra en el directorio. Creando el nuevo fichero vacío...')
-        with open(ruta_registro, 'x') as f:
-            f.write("#Registro de los archivos comprometidos al final de cada día\n")
+        print('El fichero '+register_path+' no se encuentra en el directorio. Creando el nuevo fichero vacio...')
+        with open(register_path, 'x') as f:
+            f.close()
 
     # Creamos el objeto mensaje
     mensaje = MIMEMultipart()
