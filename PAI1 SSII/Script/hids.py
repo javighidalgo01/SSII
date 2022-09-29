@@ -93,13 +93,10 @@ def searchFileById(root, ID):
 Función que comprueba si ha sido comprometida la integridad de los archivos que se le pasan
 """
 def checkIntegrity(tree, ids):
-    compromisedFiles = []
-    nameFile = ""
     for i in ids:
         node = searchFileById(tree, i)
         newHash = getFileHash(node.path)
         if newHash != node.hash:
-            compromisedFiles.append(node)
             nameFile = os.path.basename(node.path)
             logging.debug(nameFile)    #si y solo si se produce una modificación se guarda en el log
 
@@ -107,14 +104,19 @@ def checkIntegrity(tree, ids):
 Código del HIDS
 """
 if not os.path.exists(DIRECTORIO_BASE):
-    raise Exception("La ruta especificada no existe")
+    try:
+        os.mkdir(DIRECTORIO_BASE)
+    except OSError as e:
+        print("La carpeta especificada en el archivo PARAMETERS.conf no existe y no se ha podido crear")
+        raise e
+    
 
 files = getAllFilesInDirectory(DIRECTORIO_BASE)
 n = len(files)
 print("Construyendo arbol binario de busqueda de {} archivos".format(n))
 timer = time.perf_counter()
 tree = createBST(list(range(n)), files, 0, n-1)
-print("Hecho en {} segundos!".format(time.perf_counter() - timer))
+print("Hecho en {} segundos!\nA partir de este momento los archivos de la ruta {} estan siendo protegidos".format(time.perf_counter() - timer, DIRECTORIO_BASE))
 starttime = time.time()
 k = 0
 while True:

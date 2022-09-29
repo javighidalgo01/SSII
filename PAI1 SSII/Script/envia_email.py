@@ -8,7 +8,7 @@ import pathlib
 import os
 
 #Variables del sistema
-sender, user, passw, server, puerto, destinatarios, asunto, ruta_registro, cuerpo = params.loadMail()
+sender, user, passw, server, puerto, destinatarios, asunto, cuerpo = params.loadMail()
 
 script_path = pathlib.Path(__file__).parent.parent.resolve()
 register_filename = "registro.log"
