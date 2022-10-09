@@ -97,6 +97,7 @@ Use the `BLANK_README.md` to get started.
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
 * [![Python][python-shield]][python-url]
+* [![Eclipse (Java)][eclipse-shield]][eclipse-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -151,4 +152,6 @@ _Below is an example of how you can instruct your audience on installing and set
 [product-screenshot]: images/screenshot.png
 [python-shield]: https://img.shields.io/badge/python-v3.7-blue
 [python-url]: https://www.python.org/
+[eclipse-shield]: https://img.shields.io/badge/Eclipse-2C2255?style=for-the-badge&logo=eclipse&logoColor=white
+[eclipse-url]: https://www.eclipse.org/downloads/packages/release/kepler/sr1/eclipse-ide-java-developers
 [git-url]: https://git-scm.com/
