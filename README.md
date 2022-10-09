@@ -113,18 +113,18 @@ To get a local copy up and running follow these simple steps.
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-1. Install python: [python-url] or
+1. Install [[python-shield]][python-url] or
    ```sh
    apt-get install python
    ```
-2. Install git: [git-url] or
+2. Install [[git-shield]][git-url] or
    ```sh
    apt-get install git
    ```
 
 ### Installation
 
-_Below is an example of how you can instal and set up our app with [![git][git-shield]][git-url]._
+_Below is an example of how you can instal and set up our app with [[git-shield]][git-url]._
 
 1. Clone the repo:
    ```sh
