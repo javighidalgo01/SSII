@@ -1,5 +1,6 @@
 import secrets
 import hmac
+import random
 
 secretKey = None
 secretKeySet = False
@@ -43,7 +44,35 @@ def getNonce():
                 nonce = toStrFixedLength(20, secrets.randbelow(10**20))                             
     except OSError as e:
         print("No se ha podido comprobar si el nonce se ha generado anteriormente", e.errno, e.strerror)
+
+    #comprueba que el fichero existe, si no, lo crea vacío
+    try:
+        file = open("nonceHistory.txt", 'rt')
+        file.close()
+    except FileNotFoundError:
+        print('El fichero nonceHistory.txt no se encuentra en el directorio. Creando el nuevo fichero vacio...')
+        with open("nonceHistory.txt", 'x') as f:
+            f.close()
+
+    #se escribe el nonce en el fichero nonceHistory
+    file = open("nonceHistory.txt", 'w')
+    file.write(nonce)
+    file.close()
+
     return nonce
+
+def generaMensaje():
+    origen = ""
+    destino = ""
+    cantidad = ""
+    for x in range(5): 
+        origen += str(random.randint(0,9))
+        destino += str(random.randint(0,9))
+    for y in range(3):
+        cantidad += str(random.randint(0,9))
+
+    return origen + " " + destino + " " + cantidad
+
 
 if not secretKeySet:
     updateSecretKey()
