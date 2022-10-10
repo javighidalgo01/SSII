@@ -44,15 +44,10 @@ def getNonce():
                 nonce = toStrFixedLength(20, secrets.randbelow(10**20))                             
     except OSError as e:
         print("No se ha podido comprobar si el nonce se ha generado anteriormente", e.errno, e.strerror)
-
-    #comprueba que el fichero existe, si no, lo crea vacío
-    try:
-        file = open("nonceHistory.txt", 'rt')
-        file.close()
-    except FileNotFoundError:
-        print('El fichero nonceHistory.txt no se encuentra en el directorio. Creando el nuevo fichero vacio...')
+        #crea el archivo
         with open("nonceHistory.txt", 'x') as f:
             f.close()
+
 
     #se escribe el nonce en el fichero nonceHistory
     file = open("nonceHistory.txt", 'w')
