@@ -17,12 +17,13 @@ def server_func():
             break
         # Getting printing stream lock is important
         stream_lock.acquire()
-        print("Received:", str(data))
-        if True:
+        mensaje_con_nonce=data.split()[0]
+        print("Received:", str(mensaje_con_nonce))
+        if security.man_in_the_middle(mensaje_con_nonce+"d".encode()):
             print("Transaction Accepted")
             conn.send("OK".encode())
         else:
-            print("Transaction Denied")
+            print("Transaction Denied: Mac distinta Cliente/Servidor")
             conn.send("FAILED".encode())
         stream_lock.release()
         

@@ -3,20 +3,31 @@ import hmac
 
 secretKey = None
 secretKeySet = False
+mac= ""
+nonce = ""
 
 def secureMessage(text, key):
+    global mac,nonce
     nonce = getNonce()
-    text += "\n" + nonce
+    text += nonce
     textB = text.encode()
     mac = hmac.new(key, msg=textB, digestmod='sha256')
     digest = mac.digest()
-    return textB + digest
+    return textB +" ".encode()+ digest
     
     
 def updateSecretKey():
     global secretKey, secretKeySet
     secretKey = secrets.token_bytes(16)
     secretKeySet=True
+
+def man_in_the_middle(mensaje):
+    mac_nuevo=hmac.new(secretKey, msg=mensaje.split()[0], digestmod='sha256')
+    print(mensaje)
+    if(mac_nuevo.digest()!=mac.digest()):
+        return False
+    else:
+        return True
 
 def toStrFixedLength(length, num):
     nonceStr = str(num)
@@ -36,3 +47,5 @@ def getNonce():
 
 if not secretKeySet:
     updateSecretKey()
+
+print(nonce,mac)
