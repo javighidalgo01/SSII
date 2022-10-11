@@ -1,9 +1,11 @@
+from asyncio import sleep
 import socket
 import threading
 import socket
 import security
 import pathlib
 import os
+import time
 
 stream_lock = threading.Lock()
 
@@ -12,7 +14,8 @@ script_path = pathlib.Path(__file__).parent.parent.resolve()
 register_filename = "registro.log"
 register_path = os.path.join(script_path, register_filename)
 
-registro= open(register_path, "w", encoding="utf-8")
+kpi = []
+kpi_enviados = 100
 
 def server_func():
     host = socket.gethostname()
@@ -35,11 +38,13 @@ def server_func():
         mensaje = security.random_Mitm(mensaje_cliente,nonce)
         if security.nonceHaSidoUsado(nonce):    
             print("Transaction Denied: Nonce ya usado (Ataque Replay)")
-            security.write_to_log(registro,"Ataque Replay","Mensaje:"+mensaje)
+            security.write_to_log("Ataque Replay","Mensaje:"+mensaje)
+            kpi.append("RP")
             conn.send("FAILED".encode())
         elif security.check_man_in_the_middle(mensaje.encode(), macDigest):
             print("Transaction Denied: Mac distinta Cliente/Servidor (Ataque MITM)")
-            security.write_to_log(registro,"Ataque MITM","Mensaje:"+mensaje[:17])
+            security.write_to_log("Ataque MITM","Mensaje:"+mensaje[:17])
+            kpi.append("MITM")
             conn.send("FAILED".encode())
         else:
             print("Transaction Accepted")
@@ -54,7 +59,7 @@ def client_func():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, 5005))
     text = ''
-    for _ in range(100):
+    for _ in range(kpi_enviados):
         #stream_lock.acquire()
         #text = input(" > ")  # again take input 
         message = security.secureMessage(security.generaMensaje(), security.secretKey)
@@ -66,3 +71,8 @@ def client_func():
 
 t_server = threading.Thread(target=server_func).start()
 t_client = threading.Thread(target=client_func).start()
+
+time.sleep(4)
+print("\nEl numero de ataques MITM son: "+ str(kpi.count('MITM')))
+print("El numero de ataques Replay son: "+ str(kpi.count('RP')))
+print("KPI: "+str(len(kpi)/kpi_enviados))

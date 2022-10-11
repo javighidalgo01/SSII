@@ -3,6 +3,7 @@ import secrets
 import hmac
 import random
 import json
+import logging
 import datetime
 from collections import OrderedDict
 import pathlib
@@ -11,6 +12,10 @@ import os
 script_path = pathlib.Path(__file__).parent.parent.resolve()
 nonce_filename = "nonceHistory.txt"
 nonce_path = os.path.join(script_path, nonce_filename)
+register_filename = "registro.log"
+register_path = os.path.join(script_path, register_filename)
+
+logging.basicConfig(filename=register_path, format='%(asctime)s - %(message)s', level=logging.DEBUG)
 
 secretKey = None
 secretKeySet = False
@@ -84,8 +89,8 @@ def check_man_in_the_middle(mensaje, oldDigest):
 if not secretKeySet:
     updateSecretKey()
 
+"""
 def write_to_log(file_object, event_name, description):
-    """Write message to a log file"""
     event_time = str(datetime.datetime.now())
     data = OrderedDict()
     data['time'] = event_time
@@ -93,3 +98,8 @@ def write_to_log(file_object, event_name, description):
     data['details'] = description
     json.dump(data, file_object, separators=(', ', ':'))
     file_object.write('\n')
+"""
+
+def write_to_log(event_name, description):
+    logging.debug(event_name+" - "+description)
+
