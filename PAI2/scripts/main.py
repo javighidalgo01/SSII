@@ -9,11 +9,6 @@ import time
 
 stream_lock = threading.Lock()
 
-#Configuración de la gestión del Log
-script_path = pathlib.Path(__file__).parent.parent.resolve()
-register_filename = "registro.log"
-register_path = os.path.join(script_path, register_filename)
-
 kpi = []
 kpi_enviados = 100
 
