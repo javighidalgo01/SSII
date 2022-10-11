@@ -4,7 +4,7 @@ import socket
 import security
 
 stream_lock = threading.Lock()
-
+registro= open("PAI2/registro.log", "w", encoding="utf-8")
 def server_func():
     host = socket.gethostname()
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -15,18 +15,22 @@ def server_func():
         data = conn.recv(1024)
         if not data:
             break
+        mensaje_cliente = data[:16].decode()
         mensaje_con_nonce = data[:-32]
         nonce = mensaje_con_nonce[-20:].decode()
+        print(nonce)
         macDigest = data[-32:]
         # Getting printing stream lock is important
         stream_lock.acquire()
-        print("Received:", mensaje_con_nonce.decode())
+        print("Received:", mensaje_cliente)
+        mensaje = security.random_Mitm(mensaje_cliente,nonce)
         if security.nonceHaSidoUsado(nonce):    
             print("Transaction Denied: Nonce ya usado (Ataque Replay)")
+            security.write_to_log(registro,"Ataque Replay","Mensaje:"+mensaje)
             conn.send("FAILED".encode())
-        
-        elif security.check_man_in_the_middle(mensaje_con_nonce+"b".encode(), macDigest):
+        elif security.check_man_in_the_middle(mensaje.encode(), macDigest):
             print("Transaction Denied: Mac distinta Cliente/Servidor (Ataque MITM)")
+            security.write_to_log(registro,"Ataque MITM","Mensaje:"+mensaje[:17])
             conn.send("FAILED".encode())
         else:
             print("Transaction Accepted")

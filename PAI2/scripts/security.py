@@ -1,6 +1,11 @@
+from datetime import date
 import secrets
 import hmac
 import random
+import json
+import datetime
+from collections import OrderedDict
+
 
 secretKey = None
 secretKeySet = False
@@ -11,7 +16,14 @@ def secureMessage(text, key):
     mac = hmac.new(key, msg = textB, digestmod = 'sha256')
     digest = mac.digest()
     return textB + digest
-    
+
+def random_Mitm(mensaje_cliente,nonce):
+    i = random.choice(range(2))
+    if(i==1):
+        return mensaje_cliente+"b "+nonce
+    else:
+        return mensaje_cliente+nonce
+
 def updateSecretKey():
     global secretKey, secretKeySet
     secretKey = secrets.token_bytes(16)
@@ -66,3 +78,13 @@ def check_man_in_the_middle(mensaje, oldDigest):
 
 if not secretKeySet:
     updateSecretKey()
+
+def write_to_log(file_object, event_name, description):
+    """Write message to a log file"""
+    event_time = str(datetime.datetime.now())
+    data = OrderedDict()
+    data['time'] = event_time
+    data['event'] = event_name
+    data['details'] = description
+    json.dump(data, file_object, separators=(', ', ':'))
+    file_object.write('\n')
