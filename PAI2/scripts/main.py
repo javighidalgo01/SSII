@@ -15,16 +15,23 @@ def server_func():
         data = conn.recv(1024)
         if not data:
             break
+        mensaje_con_nonce = data[:-32]
+        nonce = mensaje_con_nonce[-20:].decode()
+        macDigest = data[-32:]
         # Getting printing stream lock is important
         stream_lock.acquire()
-        mensaje_con_nonce=data.split()[0]
-        print("Received:", str(mensaje_con_nonce))
-        if security.man_in_the_middle(mensaje_con_nonce+"d".encode()):
-            print("Transaction Accepted")
-            conn.send("OK".encode())
-        else:
-            print("Transaction Denied: Mac distinta Cliente/Servidor")
+        print("Received:", mensaje_con_nonce.decode())
+        if security.nonceHaSidoUsado(nonce):    
+            print("Transaction Denied: Nonce ya usado (Ataque Replay)")
             conn.send("FAILED".encode())
+        
+        elif security.check_man_in_the_middle(mensaje_con_nonce+"b".encode(), macDigest):
+            print("Transaction Denied: Mac distinta Cliente/Servidor (Ataque MITM)")
+            conn.send("FAILED".encode())
+        else:
+            print("Transaction Accepted")
+            security.agregaNonceAlRegistro(nonce)
+            conn.send("OK".encode())
         stream_lock.release()
         
     conn.close()
@@ -34,11 +41,11 @@ def client_func():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, 5005))
     text = ''
-    while text.lower().strip() != 'bye':
-        stream_lock.acquire()
-        text = input(" > ")  # again take input 
-        message = security.secureMessage(text, security.secretKey)
-        stream_lock.release()
+    for _ in range(100):
+        #stream_lock.acquire()
+        #text = input(" > ")  # again take input 
+        message = security.secureMessage(security.generaMensaje(), security.secretKey)
+        #stream_lock.release()
         s.send(message)  # send message
         data = s.recv(1024).decode()
            
