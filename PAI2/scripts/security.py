@@ -1,24 +1,11 @@
-from datetime import date
 import secrets
 import hmac
 import random
-import json
-import logging
-import datetime
-from collections import OrderedDict
 import pathlib
 import os
 
-script_path = pathlib.Path(__file__).parent.parent.resolve()
-nonce_filename = "nonceHistory.txt"
-nonce_path = os.path.join(script_path, nonce_filename)
-register_filename = "registro.log"
-register_path = os.path.join(script_path, register_filename)
-
-logging.basicConfig(filename=register_path, format='%(asctime)s - %(message)s', level=logging.DEBUG)
-
-secretKey = None
-secretKeySet = False
+project_path = pathlib.Path(__file__).parent.parent.resolve()
+nonce_path = os.path.join(project_path, "nonceHistory.txt")
 
 def secureMessage(text, key):
     nonce = getNonce()
@@ -27,12 +14,12 @@ def secureMessage(text, key):
     digest = mac.digest()
     return textB + digest
 
-def random_Mitm(mensaje_cliente,nonce):
-    i = random.choice(range(2))
-    if(i==1):
-        return mensaje_cliente+"b "+nonce
-    else:
-        return mensaje_cliente+nonce
+def mitm(message):
+    mac = message[-32:]
+    mensaje_con_nonce = message[:-32]
+    mensaje_cliente = mensaje_con_nonce[:-21]
+    nonce = mensaje_con_nonce[-21:]
+    return mensaje_cliente+ " MOD".encode() + nonce + mac
 
 def updateSecretKey():
     global secretKey, secretKeySet
@@ -78,16 +65,15 @@ def agregaNonceAlRegistro(nonce):
 def nonceHaSidoUsado(nonce):
     try:
         with open(nonce_path, 'rt') as f:
-            return nonce in f.readlines()                            
+            return nonce in f.read().splitlines()                         
     except OSError as e:
         print("No se ha podido acceder al historial de nonces. Servidor vulnerable a ataque replay.", e.errno, e.strerror)
 
-def check_man_in_the_middle(mensaje, oldDigest):
+def check_mitm(mensaje, oldDigest):
     mac_nuevo = hmac.new(secretKey, msg = mensaje, digestmod = 'sha256')
     return mac_nuevo.digest() != oldDigest
 
-if not secretKeySet:
-    updateSecretKey()
+updateSecretKey()
 
 """
 def write_to_log(file_object, event_name, description):
@@ -100,6 +86,5 @@ def write_to_log(file_object, event_name, description):
     file_object.write('\n')
 """
 
-def write_to_log(event_name, description):
-    logging.debug(event_name+" - "+description)
+
 
