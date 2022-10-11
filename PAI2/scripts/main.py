@@ -2,9 +2,18 @@ import socket
 import threading
 import socket
 import security
+import pathlib
+import os
 
 stream_lock = threading.Lock()
-registro= open("PAI2/registro.log", "w", encoding="utf-8")
+
+#Configuración de la gestión del Log
+script_path = pathlib.Path(__file__).parent.parent.resolve()
+register_filename = "registro.log"
+register_path = os.path.join(script_path, register_filename)
+
+registro= open(register_path, "w", encoding="utf-8")
+
 def server_func():
     host = socket.gethostname()
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

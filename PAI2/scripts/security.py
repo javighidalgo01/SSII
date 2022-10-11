@@ -5,7 +5,12 @@ import random
 import json
 import datetime
 from collections import OrderedDict
+import pathlib
+import os
 
+script_path = pathlib.Path(__file__).parent.parent.resolve()
+nonce_filename = "nonceHistory.txt"
+nonce_path = os.path.join(script_path, nonce_filename)
 
 secretKey = None
 secretKeySet = False
@@ -35,7 +40,7 @@ def toStrFixedLength(length, num):
 def getNonce():
     nonce = toStrFixedLength(20, secrets.randbelow(10**20))
     try:
-        with open("nonceHistory.txt", 'rt') as f:
+        with open(nonce_path, 'rt') as f:
             while nonce in f.readlines():
                 nonce = toStrFixedLength(20, secrets.randbelow(10**20))                             
     except OSError as e:
@@ -62,12 +67,12 @@ def generaMensaje():
 
 def agregaNonceAlRegistro(nonce):
     #se escribe el nonce en el fichero nonceHistory.
-    with open("nonceHistory.txt", 'a') as f:
+    with open(nonce_path, 'a') as f:
         f.write(nonce+"\n")
 
 def nonceHaSidoUsado(nonce):
     try:
-        with open("nonceHistory.txt", 'rt') as f:
+        with open(nonce_path, 'rt') as f:
             return nonce in f.readlines()                            
     except OSError as e:
         print("No se ha podido acceder al historial de nonces. Servidor vulnerable a ataque replay.", e.errno, e.strerror)
