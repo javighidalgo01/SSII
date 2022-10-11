@@ -47,7 +47,7 @@ def getNonce():
         print("No se ha podido comprobar si el nonce se ha generado anteriormente:", e.strerror)
         if  e.errno == 2:
             print("El motivo es que el archivo no existe. Se intentara crear...")
-            with open("nonceHistory.txt", 'x') as f:
+            with open(nonce_path, 'x') as f:
                 f.close()
                 print("Exito al crear")
     return nonce
