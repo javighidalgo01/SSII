@@ -11,9 +11,9 @@ import time
 '''
 VARIABLES AJUSTABLES
 '''
-mensajes_enviados = 100
-prob_mitm = 0.25
-prob_replay = 0.25
+mensajes_enviados = 500
+prob_mitm = 0.5
+prob_replay = 0.1
 
 #Configuracion del log 
 assert prob_mitm + prob_replay <=1 and prob_mitm > 0 and prob_replay > 0
@@ -22,18 +22,20 @@ register_path = os.path.join(project_path, "registro.log")
 logging.basicConfig(filename=register_path, format='%(asctime)s - %(message)s', level=logging.DEBUG)
 stream_lock = threading.Lock()
 kpi = []
+n_ataques_replay_generados = 0
+n_ataques_mitm_generados = 0
 
 def write_to_log(event_name, description):
     logging.debug(event_name+" - "+description)
 
 def ataqueReplayDetectado(mensaje_cliente, nonce):
-    print("Transaction Denied: Nonce ya usado (Ataque Replay)")
-    write_to_log("Ataque Replay","Mensaje:"+mensaje_cliente)
+    #print("Transaction Denied: Nonce ya usado (Ataque Replay)")
+    write_to_log("Ataque Replay","Mensaje: "+mensaje_cliente+ "      - El nonce "+nonce+" ya ha sido usado")
     kpi.append("RP")
 
 def ataqueMITMDetectado(mensaje_cliente):
-    print("Transaction Denied: Mac distinta Cliente/Servidor (Ataque MITM)")
-    write_to_log("Ataque MITM","Mensaje:"+mensaje_cliente)
+    #print("Transaction Denied: Mac distinta Cliente/Servidor (Ataque MITM)")
+    write_to_log("Ataque MITM  ","Mensaje: "+mensaje_cliente + "  - Los codigos MAC no coinciden")
     kpi.append("MITM")
 
 '''
@@ -58,7 +60,7 @@ def server_func():
         nonce = mensaje_con_nonce[-20:].decode()
         macDigest = data[-32:]
         stream_lock.acquire() #esto solo hace falta para hacer print. Si en el futuro quitamos los print podemos quitar esta linea
-        print("Received:", mensaje_cliente)
+        #print("Received:", mensaje_cliente)
         if security.nonceHaSidoUsado(nonce):    
             ataqueReplayDetectado(mensaje_cliente, nonce)
             conn.send("FAILED".encode())
@@ -66,19 +68,27 @@ def server_func():
             ataqueMITMDetectado(mensaje_cliente)
             conn.send("FAILED".encode())
         else:
-            print("Transaction Accepted")
+            #print("Transaction Accepted")
             security.agregaNonceAlRegistro(nonce)
             conn.send("OK".encode())
         stream_lock.release()#esto solo hace falta para hacer print. Si en el futuro quitamos los print podemos quitar esta linea
         
     conn.close()
-
-    print("\nEl numero de ataques MITM son: "+ str(kpi.count('MITM')))
-    print("El numero de ataques Replay son: "+ str(kpi.count('RP')))
+    
+    print("\nMensajes generados en total: {}.\nProbabilidad MITM: {}. Probabilidad replay: {}".format(mensajes_enviados, prob_mitm, prob_replay))
+    print("Se han generado {} ataques MITM. De los cuales detectados: {}".format(n_ataques_mitm_generados, str(kpi.count('MITM'))))
+    print("Se han generado {} ataques Replay. De los cuales detectados: {}".format(n_ataques_replay_generados, str(kpi.count('RP'))))
     print("KPI: "+str(len(kpi)/mensajes_enviados))
 
 
+'''
+Funcion que implementa el cliente. Abre la conexion y genera tantos mensajes como se
+haya especificado en las variables globales. Ademas, segun las probabilidades
+especificadas, simula ambos tipos de ataque, modificando el mensaje en el caso
+del ataque MITM, y mandando dos veces exactamente el mismo mensaje en el caso de ataque replay
+'''
 def client_func():
+    global n_ataques_mitm_generados, n_ataques_replay_generados
     host = socket.gethostname()  # as both code is running on same pc
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, 5005))
@@ -91,17 +101,19 @@ def client_func():
         ataque_replay = r >= prob_mitm and r < (prob_mitm + prob_replay)
         
         stream_lock.acquire()
-        print('')
+        #print('')
         stream_lock.release()
         if ataque_mitm:
+            n_ataques_mitm_generados +=1
             message = security.mitm(message)
         
         s.send(message)  # send message
         data = s.recv(1024).decode()
 
         if ataque_replay:
+            n_ataques_replay_generados +=1
             stream_lock.acquire()
-            print("\nREPLAY:")
+            #print("\nREPLAY:")
             stream_lock.release()
             
             s.send(message)
