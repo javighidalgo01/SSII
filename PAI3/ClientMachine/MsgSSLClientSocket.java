@@ -16,7 +16,7 @@ public class MsgSSLClientSocket {
 		try {
 
 			SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-			SSLSocket socket = (SSLSocket) factory.createSocket("10.0.2.15", 3343);
+			SSLSocket socket = (SSLSocket) factory.createSocket(args[0], 3343);
 
 			// create BufferedReader for reading server response
 			BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -24,11 +24,7 @@ public class MsgSSLClientSocket {
 			// create PrintWriter for sending login to server
 			PrintWriter output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 			// prompt user for user name
-			try{
-			Thread.sleep(60000);
-			}catch(InterruptedException e){
-			}
-			/*
+
 			String msg = JOptionPane.showInputDialog(null, "Enter a message:");
 
 			// send user name to server
@@ -41,7 +37,6 @@ public class MsgSSLClientSocket {
 
 			// display response to user
 			JOptionPane.showMessageDialog(null, response);
-			*/
 			// clean up streams and Socket
 			output.close();
 			input.close();

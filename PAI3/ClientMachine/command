@@ -1,5 +1,6 @@
 javac MsgSSLClientSocket.java
-for i in {0..299}
+for (( i=0; i<=$2; i++))
 do
-	java -Djavax.net.ssl.trustStore=keystore.jks -Djavax.net.ssl.trustStorePassword=BYODServer MsgSSLClientSocket &
+	java -Djavax.net.ssl.trustStore=keystore.jks -Djavax.net.ssl.trustStorePassword=BYODServer MsgSSLClientSocket $1 &
+	sleep .5
 done
