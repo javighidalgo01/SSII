@@ -1,0 +1,2 @@
+javac MsgSSLServerSocket.java -Xdiags:verbose
+java -Djavax.net.ssl.keyStore=keystore.jks -Djavax.net.ssl.keyStorePassword=BYODServer MsgSSLServerSocket
