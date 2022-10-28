@@ -25,7 +25,7 @@ public class MsgSSLClientSocket {
 			PrintWriter output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 			// prompt user for user name
 
-			String msg = JOptionPane.showInputDialog(null, "Enter a message:");
+			String msg = JOptionPane.showInputDialog(null, "Enter User:Passsword:Message");
 
 			// send user name to server
 			output.println(msg);

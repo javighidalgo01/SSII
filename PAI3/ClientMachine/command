@@ -1,6 +1,21 @@
+if [ -z $1 ]
+	then
+    	let a="localhost"
+	else
+		let a=$1
+fi
+
+if [ -z $2 ]
+	then
+    	let b=1
+	else
+		let b=$2
+fi
+
 javac MsgSSLClientSocket.java
-for (( i=0; i<=$2; i++))
-do
-	java -Djavax.net.ssl.trustStore=keystore.jks -Djavax.net.ssl.trustStorePassword=BYODServer MsgSSLClientSocket $1 &
-	sleep .5
+
+for (( i=1; i<=$b; i++))
+	do
+		java -Djavax.net.ssl.trustStore=keystore.jks -Djavax.net.ssl.trustStorePassword=BYODServer MsgSSLClientSocket $a &
+		sleep .3
 done

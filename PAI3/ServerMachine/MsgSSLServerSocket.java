@@ -1,10 +1,4 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-
-import java.io.*;
 
 import javax.net.ssl.*;
 
@@ -23,11 +17,8 @@ public class MsgSSLServerSocket {
 		System.err.println("Waiting connection...");
 		new Thread(new Counter()).start();
 		while(true){
-			
-			//System.err.println("Conexiones simultaneas: " + n_connections);
-      			SSLSocket socket = (SSLSocket) serverSocket.accept();
-    			new Thread(new DoSomethingWithInput(socket)).start();
-    			//System.out.print("\033\143Conexiones simultaneas: " + n_connections);	
+			SSLSocket socket = (SSLSocket) serverSocket.accept();
+    		new Thread(new StoreInput(socket)).start();
 		} 
 	}
 
