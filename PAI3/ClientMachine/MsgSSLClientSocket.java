@@ -14,22 +14,14 @@ public class MsgSSLClientSocket {
 	 */
 	public static void main(String[] args) throws IOException {
 		try {
-
 			SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 			SSLSocket socket = (SSLSocket) factory.createSocket(args[0], 3343);
-
-			// create BufferedReader for reading server response
 			BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-			// create PrintWriter for sending login to server
 			PrintWriter output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-			// prompt user for user name
-
 			String msg = JOptionPane.showInputDialog(null, "Enter User:Passsword:Message");
 
 			// send user name to server
 			output.println(msg);
-
 			output.flush();
 
 			// read response from server
@@ -49,7 +41,6 @@ public class MsgSSLClientSocket {
 			ioException.printStackTrace();
 		}
 
-		// exit application
 		finally {
 			System.exit(0);
 		}

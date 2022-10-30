@@ -68,3 +68,23 @@ Password: micontraseña
 Message: Hoy el cielo esta nublado
 
 
+User: D
+Password: f
+Message: 778
+
+
+User: Rodolfo
+Password: 12345
+Message: Hoy hace mucho calor
+
+
+User: Juanito
+Password: Juan
+Message: lolo
+
+
+User: Solo
+Password: solo
+Message: solo
+
+

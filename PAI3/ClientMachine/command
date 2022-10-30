@@ -2,7 +2,7 @@ if [ -z $1 ]
 	then
     	let a="localhost"
 	else
-		let a=$1
+		a=$1
 fi
 
 if [ -z $2 ]
