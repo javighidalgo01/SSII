@@ -1,0 +1,34 @@
+//HISTORIAL DE PEDIDOS REALIZADOS AL SERVIDOR
+
+2022/11/29 14:05:35
+Mensaje Recibido. Firma verificada. Pedido:
+Sabanas. Sillas. Mesas. 
+
+2022/11/29 14:07:08
+Mensaje Recibido. Firma verificada. Pedido:
+Sillas. Camas. 
+
+2022/11/29 14:08:46
+Mensaje Recibido. Firma verificada. Pedido:
+Sabanas. Sillas. Mesas. Camas. 
+
+2022/11/29 14:08:59
+Mensaje Recibido. Firma verificada. Pedido:
+Sabanas. Camas. 
+
+2022/11/29 14:09:05
+Mensaje Recibido. Firma verificada. Pedido:
+Sillas. Mesas. 
+
+2022/11/29 14:16:44
+Mensaje Recibido. Firma verificada. Pedido:
+Sillas. Camas. 
+
+2022/11/29 16:36:24
+Mensaje Recibido. Firma verificada. Pedido:
+Sabanas. Sillas. Mesas. Camas. 
+
+2022/11/29 16:36:45
+Mensaje Recibido. Firma verificada. Pedido:
+Sillas. 
+
