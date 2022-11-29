@@ -38,8 +38,8 @@ public class SocketThread implements Runnable {
 			sg.initVerify(publicKey);
 			sg.update(msg.getBytes());
 			Boolean verified = sg.verify(sign);		
-			String response = verified?"Firma Verificada. Peticion Aceptada":"Firma invalida. Peticion Rechazada";
-			input.close();
+			
+			
 
 			//escribir en el archivo historico de pedidos
 			FileWriter fileWriter = new FileWriter("pedidos.txt", true);
@@ -72,8 +72,9 @@ public class SocketThread implements Runnable {
 			printWriter.close();
 
 			//devolder respuesta al servidor y cerrar socket
-			output.println(response);			
-			output.close();			
+			output.println(verified?"Firma Verificada. Peticion Aceptada":"Firma invalida. Peticion Rechazada");			
+			output.close();
+			input.close();	
 			socket.close();
 			System.out.println("Se ha procesado un mensaje");
 
